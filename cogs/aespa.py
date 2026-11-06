@@ -39,27 +39,24 @@ class Aespa(commands.Cog) :
             embed.add_field(name = "Instagram", value = f"[바로가기](https://www.instagram.com/{data['instagram']})", inline = False)
             embed.add_field(name = "Weibo", value = f"[바로가기](https://weibo.com/u/{data['weibo']})", inline = False)
 
+        else:
+            embed = discord.Embed(description=f"❌ {name}의 대한 정보를 찾을수 없습니다.", color=0x808080)
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
+
         await interaction.response.send_message(embed=embed)
 
     @app_commands.command(name = "aespa", description="aespa's SNS")
-    async def aespa(self, interaction: discord.Interaction):
-        await self.send_sns(interaction, "aespa")
+    @app_commands.choices(member=[
+            app_commands.Choice(name="KARINA", value="karina"),
+            app_commands.Choice(name="GISELLE", value="giselle"),
+            app_commands.Choice(name="WINTER", value="winter"),
+            app_commands.Choice(name="NINGNING", value="ningning")
+        ])
+    async def aespa(self, interaction: discord.Interaction, member:str = None):
+        if member is None:
+            return await self.send_sns(interaction, "aespa")
 
-    @app_commands.command(name = "karina", description="KARINA's SNS")
-    async def karina(self, interaction: discord.Interaction) :
-        await self.send_sns(interaction, "karina")
-
-    @app_commands.command(name = "giselle", description="GISELLE's SNS")
-    async def giselle(self, interaction: discord.Interaction) :
-        await self.send_sns(interaction, "giselle")
-
-    @app_commands.command(name = "winter", description="WINTER's SNS")
-    async def winter(self, interaction: discord.Interaction) :
-        await self.send_sns(interaction, "winter")
-
-    @app_commands.command(name = "ningning", description="NINGNING's SNS")
-    async def ningning(self, interaction: discord.Interaction) :
-        await self.send_sns(interaction, "ningning")
+        await self.send_sns(interaction, member)
 
 async def setup(bot) :
     await bot.add_cog(Aespa(bot))
