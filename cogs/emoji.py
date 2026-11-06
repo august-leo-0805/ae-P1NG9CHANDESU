@@ -1,6 +1,5 @@
-import io
 import re
-
+import io
 import aiohttp
 import discord
 from discord import app_commands
@@ -132,7 +131,7 @@ class EmojiHelper(commands.Cog):
 
     @app_commands.command(name="delemoji", description="서버의 커스텀 이모지를 삭제합니다.")
     @app_commands.describe(name="삭제할 이모지 이름")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def delete_emoji(self, interaction: discord.Interaction, name: str):
         # 1. 설정 채널 확인
         settings_cog = self.bot.get_cog('Settings')

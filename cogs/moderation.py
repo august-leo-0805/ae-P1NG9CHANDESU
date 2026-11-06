@@ -44,7 +44,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="mute", description="유저의 음성 마이크를 차단합니다.")
     @app_commands.describe(member="대상 유저", time="지속 시간 (예: 10s, 5m, 1h, 1d)")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_mute(self, interaction: discord.Interaction, member: discord.Member, time: str = None):
         if not await self.check_channel(interaction):
             return
@@ -79,7 +79,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="unmute", description="유저의 음성 마이크 차단을 해제합니다.")
     @app_commands.describe(member="대상 유저")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_unmute(self, interaction: discord.Interaction, member: discord.Member):
         if not await self.check_channel(interaction):
             return
@@ -101,7 +101,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="deafen", description="유저의 헤드셋을 차단합니다.")
     @app_commands.describe(member="대상 유저", time="지속 시간 (예: 10s, 5m, 1h, 1d)")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_deafen(self, interaction: discord.Interaction, member: discord.Member, time: str = None):
         if not await self.check_channel(interaction):
             return
@@ -136,7 +136,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="undeafen", description="유저의 헤드셋 차단을 해제합니다.")
     @app_commands.describe(member="대상 유저")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_undeafen(self, interaction: discord.Interaction, member: discord.Member):
         if not await self.check_channel(interaction):
             return
@@ -155,7 +155,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="vckick", description="유저를 음성 채널에서 강제로 내보냅니다.")
     @app_commands.describe(member="대상 유저", reason="퇴장 사유")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_vckick(self, interaction: discord.Interaction, member: discord.Member, reason: str = "사유 없음"):
         if not await self.check_channel(interaction):
             return
@@ -178,7 +178,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="timeout", description="유저에게 타임아웃을 적용합니다.")
     @app_commands.describe(member="대상 유저", time="타임아웃 시간 (예: 10m, 1h)", reason="사유")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_timeout(self, interaction: discord.Interaction, member: discord.Member, time: str, reason: str = "사유 없음"):
         if not await self.check_channel(interaction):
             return
@@ -211,7 +211,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="untimeout", description="유저의 타임아웃을 해제합니다.")
     @app_commands.describe(member="대상 유저", reason="해제 사유")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_untimeout(self, interaction: discord.Interaction, member: discord.Member, reason: str = "관리자에 의한 해제"):
         if not await self.check_channel(interaction):
             return
@@ -241,7 +241,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="kick", description="서버에서 유저를 추방합니다.")
     @app_commands.describe(member="대상 유저", reason="추방 사유")
-    @app_commands.checks.has_permissions(kick_members=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_kick(self, interaction: discord.Interaction, member: discord.Member, reason: str = "사유 없음"):
         if not await self.check_channel(interaction):
             return
@@ -260,7 +260,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="ban", description="서버에서 유저를 차단합니다.")
     @app_commands.describe(member="대상 유저", reason="차단 사유")
-    @app_commands.checks.has_permissions(ban_members=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_ban(self, interaction: discord.Interaction, member: discord.Member, reason: str = "사유 없음"):
         if not await self.check_channel(interaction):
             return
@@ -282,7 +282,7 @@ class Moderation(commands.Cog):
 
     @app_commands.command(name="unban", description="차단된 유저의 차단을 해제합니다.")
     @app_commands.describe(user_spec="유저 ID 또는 이름#태그")
-    @app_commands.checks.has_permissions(ban_members=True)
+    @app_commands.default_permissions(administrator=True)
     async def server_unban(self, interaction: discord.Interaction, user_spec: str):
         if not await self.check_channel(interaction):
             return

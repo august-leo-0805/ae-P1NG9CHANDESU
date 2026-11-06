@@ -90,7 +90,7 @@ class Settings(commands.Cog):
                 print(f"패널 삭제 오류: {e}")
 
     @app_commands.command(name="check", description="현재 서버의 설정 상태를 확인합니다.")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def check_settings(self, interaction: discord.Interaction):
         gid = str(interaction.guild.id)
         config = self.get_server_data(interaction.guild)
@@ -131,7 +131,7 @@ class Settings(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     # --- /set 명령어 그룹 ---
-    set_group = app_commands.Group(name="set", description="서버 설정을 구성합니다.")
+    set_group = app_commands.Group(name="set", description="서버 설정을 구성합니다.", default_permissions=discord.Permissions(administrator=True))
 
     @set_group.command(name="log", description="로그 채널을 설정합니다.")
     @app_commands.choices(target=[
@@ -140,7 +140,6 @@ class Settings(commands.Cog):
         app_commands.Choice(name="ticket (티켓 로그)", value="ticket")
     ])
     @app_commands.describe(target="설정할 로그 종류", channel="기록할 텍스트 채널 (생략 시 현재 채널)")
-    @app_commands.checks.has_permissions(administrator=True)
     async def set_log(self, interaction: discord.Interaction, target: str, channel: discord.TextChannel = None):
         log_map = {
             "server": "server_log_channel_id",
@@ -164,11 +163,9 @@ class Settings(commands.Cog):
     @set_group.command(name="command", description="봇 명령어 전용 채널을 설정합니다.")
     @app_commands.choices(target=[
         app_commands.Choice(name="bot (일반 봇 명령어)", value="bot"),
-        app_commands.Choice(name="emoji (이모지 명령어)", value="emoji"),
         app_commands.Choice(name="ticket (티켓 패널 생성)", value="ticket")
     ])
     @app_commands.describe(target="설정할 명령어 카테고리", channel="사용할 텍스트 채널 (생략 시 현재 채널)")
-    @app_commands.checks.has_permissions(administrator=True)
     async def set_command(self, interaction: discord.Interaction, target: str, channel: discord.TextChannel = None):
         gid = str(interaction.guild.id)
         self.get_server_data(interaction.guild)
@@ -213,7 +210,6 @@ class Settings(commands.Cog):
 
     @set_group.command(name="spam", description="스팸 필터 채널을 설정합니다.")
     @app_commands.describe(channel="스팸을 감지할 텍스트 채널 (생략 시 현재 채널)")
-    @app_commands.checks.has_permissions(administrator=True)
     async def set_spam(self, interaction: discord.Interaction, channel: discord.TextChannel = None):
         gid = str(interaction.guild.id)
         self.get_server_data(interaction.guild)
@@ -231,7 +227,6 @@ class Settings(commands.Cog):
 
     @set_group.command(name="voice", description="음성 채널 생성(방 만들기)용 음성 채널을 설정합니다.")
     @app_commands.describe(voice_channel="유저가 들어가면 방이 생성되는 대상 음성 채널")
-    @app_commands.checks.has_permissions(administrator=True)
     async def set_voice(self, interaction: discord.Interaction, voice_channel: discord.VoiceChannel):
         gid = str(interaction.guild.id)
         self.get_server_data(interaction.guild)
@@ -248,10 +243,9 @@ class Settings(commands.Cog):
 
 
     # --- /reset 명령어 그룹 ---
-    reset_group = app_commands.Group(name="reset", description="서버 설정을 초기화합니다.")
+    reset_group = app_commands.Group(name="reset", description="서버 설정을 초기화합니다.", default_permissions=discord.Permissions(administrator=True))
 
     @reset_group.command(name="all", description="서버의 모든 설정을 초기화합니다.")
-    @app_commands.checks.has_permissions(administrator=True)
     async def reset_all(self, interaction: discord.Interaction):
         gid = str(interaction.guild.id)
         await interaction.response.defer(ephemeral=True)
@@ -268,7 +262,6 @@ class Settings(commands.Cog):
         app_commands.Choice(name="punish", value="punish"),
         app_commands.Choice(name="ticket", value="ticket")
     ])
-    @app_commands.checks.has_permissions(administrator=True)
     async def reset_log(self, interaction: discord.Interaction, target: str):
         log_map = {
             "server": "server_log_channel_id",
@@ -290,7 +283,6 @@ class Settings(commands.Cog):
         app_commands.Choice(name="emoji", value="emoji"),
         app_commands.Choice(name="ticket", value="ticket")
     ])
-    @app_commands.checks.has_permissions(administrator=True)
     async def reset_command(self, interaction: discord.Interaction, target: str):
         gid = str(interaction.guild.id)
         cmd_map = {
@@ -317,7 +309,6 @@ class Settings(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @reset_group.command(name="voice", description="음성 채널 생성 설정을 제거합니다.")
-    @app_commands.checks.has_permissions(administrator=True)
     async def reset_voice(self, interaction: discord.Interaction):
         gid = str(interaction.guild.id)
         if gid in self.server_configs:
@@ -329,7 +320,6 @@ class Settings(commands.Cog):
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @reset_group.command(name="spam", description="스팸 필터 채널 설정을 제거합니다.")
-    @app_commands.checks.has_permissions(administrator=True)
     async def reset_spam(self, interaction: discord.Interaction):
         gid = str(interaction.guild.id)
         if gid in self.server_configs:

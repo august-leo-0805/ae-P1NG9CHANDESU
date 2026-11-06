@@ -71,13 +71,21 @@ class Logger(commands.Cog):
         if not guild:
             return
 
+        if payload.cached_message and payload.cached_message.author.bot:
+            return
+
+        after_content = payload.data.get('content')
+
+        if payload.cached_message:
+            before_raw = payload.cached_message.content
+            if after_content is None or before_raw == after_content:
+                return
+
         author_name = "알 수 없음"
         author_icon = None
         before_content = "캐시에 없음 (재시작 전 메시지)"
 
         if payload.cached_message:
-            if payload.cached_message.author.bot:
-                return
             author = payload.cached_message.author
             author_name = str(author)
             author_icon = author.display_avatar.url
@@ -92,10 +100,6 @@ class Logger(commands.Cog):
                 author_icon = msg.author.display_avatar.url
             except Exception:
                 pass
-
-        after_content = payload.data.get('content', '')
-        if not after_content and payload.cached_message:
-            after_content = payload.cached_message.content
 
         if not after_content:
             return

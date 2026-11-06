@@ -234,7 +234,7 @@ class Ticket(commands.Cog):
 
     @app_commands.command(name="answer", description="특정 티켓 채널로 관리자 답변을 전송합니다.")
     @app_commands.describe(target_channel="답변을 보낼 티켓 채널", content="전송할 내용")
-    @app_commands.checks.has_permissions(administrator=True)
+    @app_commands.default_permissions(administrator=True)
     async def reply_ticket(self, interaction: discord.Interaction, target_channel: discord.TextChannel, content: str):
         if not (target_channel.name.startswith("ticket-") or target_channel.name.startswith("closed-")):
             embed = discord.Embed(
